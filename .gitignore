@@ -107,4 +107,4 @@ venv.bak/
 darknet/
 client/
 server/
-clouds.yaml
+*.yaml
