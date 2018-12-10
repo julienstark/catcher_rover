@@ -15,3 +15,10 @@ export CARO_CLOUD_INSTANCE_IP=192.168.100.163
 
 export CARO_CLOUD_SSH_USERNAME=centos
 export CARO_CLOUD_SSH_KEYFILE=darknet-proto.pem
+
+export CARO_DARKNET_FOLDER=$(pwd)/darknet/
+export CARO_DARKNET_LABEL=banana
+
+export CARO_DARKNET_CFG=yolov3-banana.cfg
+export CARO_DARKNET_WEIGHTS=yolov3-banana_16000.weights
+export CARO_DARKNET_DATA=banana.data
