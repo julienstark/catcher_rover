@@ -1,6 +1,8 @@
 """
 Module supporting various helpers and utility functions.
 
+function init_logger: Initialize the logger function.
+
 function init_environ_folder: Return necessary variables based on environment.
 
 class SuppressStdOutput: Suppress embedded function outputs.
@@ -8,6 +10,31 @@ class SuppressStdOutput: Suppress embedded function outputs.
 
 import os
 import inspect
+import logging
+
+
+def init_logger(appname):
+    """Initialize the logger function for the project.
+
+    Args:
+        appname: A string representing the name of the app to log for.
+
+    Returns:
+        A log object handling various logging messages.
+    """
+
+    logfile = os.path.join(os.environ['CARO_LOGFILE'])
+    logging.basicConfig(filename=logfile,
+                        filemode="w",
+                        level=logging.DEBUG,
+                        format='%(asctime)s %(name)s %(levelname)s: %(message)s',
+                        datefmt='%b %d %H:%M:%S')
+
+    console = logging.StreamHandler()
+    console.setLevel(logging.ERROR)
+    logging.getLogger("").addHandler(console)
+
+    return logging.getLogger(appname)
 
 
 def init_environ_folder():
