@@ -9,7 +9,7 @@ class Ssh: remotely access and run arbitrary commands on an instance.
 initialize_connection : initialize a SSH connection configuration items.
 """
 
-#pylint: disable=import-error,logging-not-lazy
+#pylint: disable=import-error
 
 import time
 import logging
@@ -164,7 +164,7 @@ class Cloud():
             None
         """
 
-        logging.info("creating instance " + str(self.instance[0]))
+        logging.info("creating instance %s", str(self.instance[0]))
 
         self.conn.create_server(self.instance[0],
                                 image=self.instance[1],
@@ -191,7 +191,7 @@ class Cloud():
             None
         """
 
-        logging.info("deleting instance " + str(self.instance[0]))
+        logging.info("deleting instance %s", str(self.instance[0]))
 
         self.conn.delete_server(self.instance[0])
 
@@ -355,7 +355,7 @@ class Ssh():
             None
         """
 
-        logging.info("connecting to " + self.remote_ip)
+        logging.info("connecting to %s", self.remote_ip)
 
         count = 0
 
@@ -366,18 +366,18 @@ class Ssh():
                                     username=self.username,
                                     key_filename=self.key_filename)
 
-                logging.info("connection to " + self.remote_ip + " successful")
+                logging.info("connection to %s successful", self.remote_ip)
 
                 break
 
             except pe.NoValidConnectionsError:
-                logging.warning("connection to " + self.remote_ip + " failed" +
-                                str(count) + " attempts")
+                logging.warning("connection to %s failed with %s attempts",
+                                self.remote_ip, str(count))
                 time.sleep(5)
                 count += 1
 
         if count >= int(retry_count):
-            logging.error("connection to " + self.remote_ip + " timeout")
+            logging.error("connection to %s timeout", self.remote_ip)
 
 
     def exec_command(self, command):
@@ -390,7 +390,7 @@ class Ssh():
            A tuple including the remote (STDIN, STDOUT, STDERR).
         """
 
-        logging.info("executing command " + str(command))
+        logging.info("executing command %s", str(command))
 
         stdin, stdout, stderr = self.client.exec_command(command)
 
