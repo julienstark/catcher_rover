@@ -89,7 +89,7 @@ class Cloud():
         """Setter for Cloud instance instance.
 
         Args:
-            instance: A tuple representing the instance (name, image, flavor).
+            instance: A tuple representing the instance {name, image, flavor}.
 
         Returns:
             None
@@ -117,7 +117,7 @@ class Cloud():
         """Setter for Cloud instance nets.
 
         Args:
-            nets: A tuple representing nets (security_groups, network, ips).
+            nets: A tuple representing nets {security_groups, network, ips}.
 
         Returns:
             None
@@ -145,7 +145,7 @@ class Cloud():
         """Setter for Cloud instance volume.
 
         Args:
-            volume: A tuple representing the volume (boot_volume, volume_size).
+            volume: A tuple representing the volume {boot_volume, volume_size}.
 
         Returns:
             None
@@ -164,19 +164,19 @@ class Cloud():
             None
         """
 
-        logging.info("creating instance %s", str(self.instance[0]))
+        logging.info("creating instance %s", str(self.instance['name']))
 
-        self.conn.create_server(self.instance[0],
-                                image=self.instance[1],
-                                flavor=self.instance[2],
-                                boot_volume=self.volume[0],
+        self.conn.create_server(self.instance['name'],
+                                image=self.instance['image'],
+                                flavor=self.instance['flavor'],
+                                boot_volume=self.volume['boot_volume'],
                                 boot_from_volume=True,
-                                volume_size=self.volume[1],
+                                volume_size=self.volume['volume_size'],
                                 terminate_volume=True,
-                                security_groups=self.nets[0],
+                                security_groups=self.nets['security_groups'],
                                 availability_zone="nova",
-                                network=self.nets[1],
-                                ips=self.nets[2],
+                                network=self.nets['network'],
+                                ips=self.nets['ips'],
                                 wait=True,
                                 timeout=180)
 
@@ -191,9 +191,9 @@ class Cloud():
             None
         """
 
-        logging.info("deleting instance %s", str(self.instance[0]))
+        logging.info("deleting instance %s", str(self.instance['name']))
 
-        self.conn.delete_server(self.instance[0])
+        self.conn.delete_server(self.instance['name'])
 
 
 def initialize_connection():
