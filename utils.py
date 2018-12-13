@@ -79,8 +79,8 @@ def init_environ_net():
         None
 
     Returns:
-        A tuple containing: (string cloud_config, string cloud_name,
-        dict instance, dict nets, dict volume, string username, string keyfile)
+        A dict containing: {string cloud_config, string cloud_name,
+        dict instance, dict nets, dict volume, string username, string keyfile}
     """
 
     cloud_config = os.environ['CARO_CLOUD_CONFIG_FILE']
@@ -100,7 +100,15 @@ def init_environ_net():
     username = os.environ['CARO_CLOUD_SSH_USERNAME']
     keyfile = os.environ['CARO_CLOUD_SSH_KEYFILE']
 
-    return (cloud_config, cloud_name, instance, nets, volume, username, keyfile)
+    net_environ = {'cloud_config':cloud_config,
+                   'cloud_name':cloud_name,
+                   'instance':instance,
+                   'nets':nets,
+                   'volume':volume,
+                   'username':username,
+                   'keyfile':keyfile}
+
+    return net_environ
 
 
 def init_environ_darknet():
@@ -113,18 +121,17 @@ def init_environ_darknet():
         None
 
     Returns:
-        A tuple containing: (string darknet_folder, string darknet_label,
-        string darknet_cfg, string darknet_weights, string darknet_data)
+        A dict containing: {string darknet_folder, string darknet_label,
+        string darknet_cfg, string darknet_weights, string darknet_data}
     """
 
-    darknet_folder = os.environ['CARO_DARKNET_FOLDER']
-    darknet_label = os.environ['CARO_DARKNET_LABEL']
-    darknet_cfg = os.environ['CARO_DARKNET_CFG']
-    darknet_weights = os.environ['CARO_DARKNET_WEIGHTS']
-    darknet_data = os.environ['CARO_DARKNET_DATA']
+    darknet_environ = {'folder':os.environ['CARO_DARKNET_FOLDER'],
+                       'label':os.environ['CARO_DARKNET_LABEL'],
+                       'cfg':os.environ['CARO_DARKNET_CFG'],
+                       'weights':os.environ['CARO_DARKNET_WEIGHTS'],
+                       'data':os.environ['CARO_DARKNET_DATA']}
 
-    return (darknet_folder, darknet_label, darknet_cfg, darknet_weights,
-            darknet_data)
+    return darknet_environ
 
 
 class SuppressStdOutput():
