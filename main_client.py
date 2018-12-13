@@ -43,3 +43,25 @@ def start_cloud_instance(cloud, instance, network, volume):
     target_cloud.create_instance()
 
     return target_cloud
+
+
+def run_cloud_command(remote_ip, username, keyfile, retry, command):
+    """Executes an arbitraty command on the cloud instance and retrieve
+    output.
+
+    Args:
+        remote_ip: A string representing the remote IP to connect to.
+        username: A string representing the username to employ.
+        keyfile: A string representing the keyfile path.
+        retry: An int representing the number of ssh connection attemps to do.
+        command: A string representing the remote command to execute.
+
+    Returns:
+        A tuple including std streams (stdin, stdout, stderr).
+    """
+
+    connection = net.Ssh(remote_ip, username, keyfile)
+
+    connection.remote_connect(retry)
+
+    return connection.exec_command(command)
