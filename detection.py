@@ -44,6 +44,9 @@ def initialize_image(img):
         An instance of a Darknet Image.
     """
 
+    if img is None:
+        return None
+
     image = pydarknet.Image(cv2.imread(img))
 
     return image
