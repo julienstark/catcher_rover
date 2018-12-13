@@ -38,9 +38,12 @@ def start_server():
     logger.info("catcher_rover server - hello")
 
     logger.info("initializing darknet model")
-    detector = detection.Detection(environ['darknet']['cfg'],
-                                   environ['darknet']['weight'],
-                                   environ['darknet']['data'],
+    detector = detection.Detection(os.path.join(environ['darknet']['folder'],
+                                                environ['darknet']['cfg']),
+                                   os.path.join(environ['darknet']['folder'],
+                                                environ['darknet']['weight']),
+                                   os.path.join(environ['darknet']['folder'],
+                                                environ['darknet']['data']),
                                    None)
 
     logger.info("initializing server socket")
