@@ -45,7 +45,7 @@ def start_cloud_instance(cloud, instance, network, volume):
     return target_cloud
 
 
-def run_cloud_command(remote_ip, username, keyfile, retry, command):
+def run_cloud_command(remote_ip, username, keyfile, command, retry=10):
     """Executes an arbitraty command on the cloud instance and retrieve
     output.
 
