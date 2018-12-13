@@ -84,7 +84,7 @@ def run_catcher_rover():
     output = run_cloud_command(environ['net']['nets']['ips'],
                                environ['net']['username'],
                                environ['net']['keyfile'],
-                               'cd catcher_rover ; ./run.sh')
+                               'cd catcher_rover ; ./run.sh --mode server &')
 
     if output[2] is not None:
         logger.error("error caught on instance command: %s", output[2])
