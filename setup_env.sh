@@ -1,7 +1,7 @@
 export CARO_LOGFILE=caro.log
-export CARO_CAPTURE_FOLDER=$(pwd)/client/capture/
-export CARO_INBOX_FOLDER=$(pwd)/server/inbox/
-export CARO_FOLDER=$(pwd)/
+export CARO_FOLDER=$(pwd)
+export CARO_CAPTURE_FOLDER=$CARO_FOLDER/client/capture/
+export CARO_INBOX_FOLDER=$CARO_FOLDER/server/inbox/
 
 export CARO_CLOUD_CONFIG_FILE=clouds.yaml
 
@@ -19,9 +19,9 @@ export CARO_CLOUD_INSTANCE_IP=192.168.100.163
 export CARO_CLOUD_SSH_USERNAME=centos
 export CARO_CLOUD_SSH_KEYFILE=darknet-proto.pem
 
-export CARO_DARKNET_FOLDER=$(pwd)/darknet/
+export CARO_DARKNET_FOLDER=$CARO_FOLDER/darknet
 export CARO_DARKNET_LABEL=banana
 
-export CARO_DARKNET_CFG=yolov3-banana.cfg
-export CARO_DARKNET_WEIGHTS=yolov3-banana_16000.weights
-export CARO_DARKNET_DATA=banana.data
+export CARO_DARKNET_CFG=$CARO_DARKNET_FOLDER/yolov3-banana.cfg
+export CARO_DARKNET_WEIGHTS=$CARO_DARKNET_FOLDER/yolov3-banana_16000.weights
+export CARO_DARKNET_DATA=$CARO_DARKNET_FOLDER/banana.data
