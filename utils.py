@@ -67,6 +67,42 @@ def init_environ_folder():
     return caro_loc, inbox_loc
 
 
+def init_environ_net():
+    """Return necessary cloud and ssh configs, based on environ.
+
+    Cloud-related variables define cloud access logic and instance params.
+    SSH-related variables describe how to connect to a remote instance.
+
+    This function should only be used on the client-side of the application.
+
+    Args:
+        None
+
+    Returns:
+        A tuple containing: (string cloud_config, string cloud_name,
+        tuple instance, tuple nets, tuple volume, string username, string keyfile)
+    """
+
+    cloud_config = os.environ['CARO_CLOUD_CONFIG_FILE']
+    cloud_name = os.environ['CARO_CLOUD_NAME']
+
+    instance = (os.environ['CARO_CLOUD_INSTANCE_NAME'],
+                bool(os.environ['CARO_CLOUD_INSTANCE_IMAGE']),
+                os.environ['CARO_CLOUD_INSTANCE_FLAVOR'])
+
+    nets = (os.environ['CARO_CLOUD_INSTANCE_SECURITY_GROUPS'],
+            os.environ['CARO_CLOUD_INSTANCE_NETWORK'],
+            os.environ['CARO_CLOUD_INSTANCE_IP'])
+
+    volume = (os.environ['CARO_CLOUD_INSTANCE_BOOT_VOLUME'],
+              os.environ['CARO_CLOUD_INSTANCE_VOLUME_SIZE'])
+
+    username = os.environ['CARO_CLOUD_SSH_USERNAME']
+    keyfile = os.environ['CARO_CLOUD_SSH_KEYFILE']
+
+    return (cloud_config, cloud_name, instance, nets, volume, username, keyfile)
+
+
 class SuppressStdOutput():
     """Wrapper used for doing 'deep suppression' of stdout and stderr of a
     function. Does not affect raised exceptions.
