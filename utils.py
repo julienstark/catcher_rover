@@ -80,22 +80,22 @@ def init_environ_net():
 
     Returns:
         A tuple containing: (string cloud_config, string cloud_name,
-        tuple instance, tuple nets, tuple volume, string username, string keyfile)
+        dict instance, dict nets, dict volume, string username, string keyfile)
     """
 
     cloud_config = os.environ['CARO_CLOUD_CONFIG_FILE']
     cloud_name = os.environ['CARO_CLOUD_NAME']
 
-    instance = (os.environ['CARO_CLOUD_INSTANCE_NAME'],
-                bool(os.environ['CARO_CLOUD_INSTANCE_IMAGE']),
-                os.environ['CARO_CLOUD_INSTANCE_FLAVOR'])
+    instance = {'name':os.environ['CARO_CLOUD_INSTANCE_NAME'],
+                'image':bool(os.environ['CARO_CLOUD_INSTANCE_IMAGE']),
+                'flavor':os.environ['CARO_CLOUD_INSTANCE_FLAVOR']}
 
-    nets = (os.environ['CARO_CLOUD_INSTANCE_SECURITY_GROUPS'],
-            os.environ['CARO_CLOUD_INSTANCE_NETWORK'],
-            os.environ['CARO_CLOUD_INSTANCE_IP'])
+    nets = {'security_groups':os.environ['CARO_CLOUD_INSTANCE_SECURITY_GROUPS'],
+            'network':os.environ['CARO_CLOUD_INSTANCE_NETWORK'],
+            'ips':os.environ['CARO_CLOUD_INSTANCE_IP']}
 
-    volume = (os.environ['CARO_CLOUD_INSTANCE_BOOT_VOLUME'],
-              os.environ['CARO_CLOUD_INSTANCE_VOLUME_SIZE'])
+    volume = {'boot_volume':os.environ['CARO_CLOUD_INSTANCE_BOOT_VOLUME'],
+              'volume_size':os.environ['CARO_CLOUD_INSTANCE_VOLUME_SIZE']}
 
     username = os.environ['CARO_CLOUD_SSH_USERNAME']
     keyfile = os.environ['CARO_CLOUD_SSH_KEYFILE']
