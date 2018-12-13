@@ -23,3 +23,23 @@ def init_environ():
                'darknet':utils.init_environ_darknet()}
 
     return environ
+
+
+def start_cloud_instance(cloud, instance, network, volume):
+    """Starts a cloud instance.
+
+    Args:
+        cloud: A string defining the cloud to connect to.
+        instance: A dict with instance details.
+        net: A dict with net details.
+        volume: A dict with volume details.
+
+    Returns:
+        The created Cloud instance.
+    """
+
+    target_cloud = net.Cloud(cloud, instance, network, volume)
+
+    target_cloud.create_instance()
+
+    return target_cloud
