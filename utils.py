@@ -103,6 +103,30 @@ def init_environ_net():
     return (cloud_config, cloud_name, instance, nets, volume, username, keyfile)
 
 
+def init_environ_darknet():
+    """Return necessary darknet variables, based on environ params.
+
+    Explicits darknet folder, darknet configuration file, weight, data and
+    label to use.
+
+    Args:
+        None
+
+    Returns:
+        A tuple containing: (string darknet_folder, string darknet_label,
+        string darknet_cfg, string darknet_weights, string darknet_data)
+    """
+
+    darknet_folder = os.environ['CARO_DARKNET_FOLDER']
+    darknet_label = os.environ['CARO_DARKNET_LABEL']
+    darknet_cfg = os.environ['CARO_DARKNET_CFG']
+    darknet_weights = os.environ['CARO_DARKNET_WEIGHTS']
+    darknet_data = os.environ['CARO_DARKNET_DATA']
+
+    return (darknet_folder, darknet_label, darknet_cfg, darknet_weights,
+            darknet_data)
+
+
 class SuppressStdOutput():
     """Wrapper used for doing 'deep suppression' of stdout and stderr of a
     function. Does not affect raised exceptions.
