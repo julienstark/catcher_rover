@@ -2,6 +2,8 @@
 Main runfile for the CARO client-side application.
 """
 
+import os
+
 import utils
 import camera
 import net
@@ -65,3 +67,68 @@ def run_cloud_command(remote_ip, username, keyfile, command, retry=10):
     connection.remote_connect(retry)
 
     return connection.exec_command(command)
+
+
+def run_catcher_rover():
+    """Runs the catcher_rover main loop."""
+
+    environ = init_environ()
+
+    logger = utils.init_logger('catcher_rover')
+
+    cloud = start_cloud_instance(environ['net']['cloud_name'],
+                                 environ['net']['instance'],
+                                 environ['net']['nets'],
+                                 environ['net']['volume'])
+
+    output = run_cloud_command(environ['net']['nets']['ips'],
+                               environ['net']['username'],
+                               environ['net']['keyfile'],
+                               'cd catcher_rover ; ./run.sh')
+
+    if output[2] is not None:
+        logger.error("error caught on instance command: %s", output[2])
+
+    cam = camera.Camera(environ['capture_loc'])
+
+    client_socket = socks.init_client_socket(environ['net']['nets']['ips'])
+
+    for count in range(10):
+
+        logger.info("iteration %s, capturing frame", str(count))
+        cam.capture()
+        logger.info("frame captured")
+
+        logger.info("sending frame")
+        frame_loc = os.path.join(environ['capture_loc'] + "frame.jpg")
+        socks.send_frame_size(client_socket, frame_loc)
+        socks.waiting_for_ack(client_socket)
+        socks.send_frame(client_socket, frame_loc)
+        logger.info("waiting for frame reception")
+        socks.waiting_for_ack(client_socket)
+
+        logger.info("frame sent")
+
+        logger.info("receiving vector")
+
+        socks.send_msg(client_socket, "OK VECT")
+        recv_string = socks.receive_bytes_to_string(client_socket)
+        recv_string = recv_string.replace(", ", " ").replace(": ", ":")
+        recv_string = recv_string.strip("{}").replace("'", "")
+        os.remove(frame_loc)
+
+        logger.info("vector received")
+
+        if recv_string != "":
+
+            # Do the robot move here
+            pass
+
+        else:
+            logger.warning("no detection for this frame")
+
+        cloud.delete_instance()
+
+
+if __name__ == '__main__':
+    run_catcher_rover()
