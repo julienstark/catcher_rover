@@ -74,7 +74,7 @@ def run_catcher_rover():
 
     environ = init_environ()
 
-    logger = utils.init_logger('catcher_rover')
+    logger = utils.init_logger('caro_client')
 
     cloud = start_cloud_instance(environ['net']['cloud_name'],
                                  environ['net']['instance'],
