@@ -95,7 +95,7 @@ def init_environ_net():
             'ips':os.environ['CARO_CLOUD_INSTANCE_IP']}
 
     volume = {'boot_volume':os.environ['CARO_CLOUD_INSTANCE_BOOT_VOLUME'],
-              'volume_size':os.environ['CARO_CLOUD_INSTANCE_VOLUME_SIZE']}
+              'volume_size':os.environ['CARO_CLOUD_INSTANCE_BOOT_VOLUME_SIZE']}
 
     username = os.environ['CARO_CLOUD_SSH_USERNAME']
     keyfile = os.environ['CARO_CLOUD_SSH_KEYFILE']
