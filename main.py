@@ -3,6 +3,7 @@ Main handler for the catcher_rover server component.
 """
 
 import os
+import logging
 
 import utils
 import socks
@@ -34,7 +35,8 @@ def start_server():
 
     environ = init_environ()
 
-    logger = utils.init_logger('caro_server')
+    utils.init_logger(environ['debug'])
+    logger = logging.getLogger('__main__')
     logger.info("catcher_rover server - hello")
 
     logger.info("initializing darknet model")
