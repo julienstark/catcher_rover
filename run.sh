@@ -14,6 +14,11 @@ do
       shift
       shift
       ;;
+    -d|--debug)
+      DEBUG="$2"
+      shift
+      shift
+      ;;
     *)
       POSITIONAL+=("$1")
       shift
@@ -24,6 +29,8 @@ done
 set -- "${POSITIONAL[@]}"
 
 source setup_env.sh
+
+export DEBUG=${DEBUG}
 
 if [[ "${MODE}" = "server" ]]; then
   if [[ ! -d "$CARO_INBOX_FOLDER" ]]; then

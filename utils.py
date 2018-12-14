@@ -13,11 +13,11 @@ import inspect
 import logging
 
 
-def init_logger():
+def init_logger(debug):
     """Initialize the logger function for the project.
 
     Args:
-        None
+        debug: A bool defining debug mode (verbose output) or not.
 
     Returns:
         None
@@ -31,7 +31,12 @@ def init_logger():
                         datefmt='%b %d %H:%M:%S')
 
     console = logging.StreamHandler()
-    console.setLevel(logging.ERROR)
+
+    if debug == 'True':
+        console.setLevel(logging.DEBUG)
+    else:
+        console.setLevel(logging.ERROR)
+
     logging.getLogger("").addHandler(console)
 
 

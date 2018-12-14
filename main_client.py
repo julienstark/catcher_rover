@@ -23,7 +23,8 @@ def init_environ():
 
     environ = {'capture_loc':utils.init_environ_folder(),
                'net':utils.init_environ_net(),
-               'darknet':utils.init_environ_darknet()}
+               'darknet':utils.init_environ_darknet(),
+               'debug':os.environ['DEBUG']}
 
     return environ
 
@@ -75,8 +76,8 @@ def run_catcher_rover():
 
     environ = init_environ()
 
-    utils.init_logger()
-    logger = logging.getLogger('caro_client')
+    utils.init_logger(environ['debug'])
+    logger = logging.getLogger('__name__')
 
     cloud = start_cloud_instance(environ['net']['cloud_name'],
                                  environ['net']['instance'],
@@ -87,7 +88,8 @@ def run_catcher_rover():
                " sudo tee /etc/resolv.conf > /dev/null"
                " ; git clone https://github.com/julienstark/catcher_rover.git"
                " ; mv darknet/ catcher_rover/"
-               " ; cd catcher_rover ; ./run.sh --mode server &")
+               " ; cd catcher_rover ; ./run.sh --mode server --debug " +
+               environ['debug'] + " &")
 
     output = run_cloud_command(environ['net']['nets']['ips'],
                                environ['net']['username'],
