@@ -167,7 +167,7 @@ class Cloud():
         logging.info("creating instance %s", str(self.instance['name']))
 
         self.conn.create_server(self.instance['name'],
-                                image=self.instance['image'],
+                                image=None,
                                 flavor=self.instance['flavor'],
                                 boot_volume=self.volume['boot_volume'],
                                 boot_from_volume=True,
