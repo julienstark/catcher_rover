@@ -13,14 +13,14 @@ import inspect
 import logging
 
 
-def init_logger(appname):
+def init_logger():
     """Initialize the logger function for the project.
 
     Args:
-        appname: A string representing the name of the app to log for.
+        None
 
     Returns:
-        A log object handling various logging messages.
+        None
     """
 
     logfile = os.path.join(os.environ['CARO_LOGFILE'])
@@ -33,8 +33,6 @@ def init_logger(appname):
     console = logging.StreamHandler()
     console.setLevel(logging.ERROR)
     logging.getLogger("").addHandler(console)
-
-    return logging.getLogger(appname)
 
 
 def init_environ_folder():
