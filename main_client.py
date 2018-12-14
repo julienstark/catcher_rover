@@ -3,6 +3,7 @@ Main runfile for the CARO client-side application.
 """
 
 import os
+import logging
 
 import utils
 import camera
@@ -74,7 +75,8 @@ def run_catcher_rover():
 
     environ = init_environ()
 
-    logger = utils.init_logger('caro_client')
+    utils.init_logger()
+    logger = logging.getLogger('caro_client')
 
     cloud = start_cloud_instance(environ['net']['cloud_name'],
                                  environ['net']['instance'],
