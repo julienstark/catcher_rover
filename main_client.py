@@ -81,10 +81,15 @@ def run_catcher_rover():
                                  environ['net']['nets'],
                                  environ['net']['volume'])
 
+    command = ("echo 'nameserver 8.8.8.8' |"
+               " sudo tee /etc/resolv.conf > /dev/null"
+               " ; git clone https://github.com/julienstark/catcher_rover.git"
+               " ; cd catcher_rover ; ./run.sh --mode server &")
+
     output = run_cloud_command(environ['net']['nets']['ips'],
                                environ['net']['username'],
                                environ['net']['keyfile'],
-                               'cd catcher_rover ; ./run.sh --mode server &')
+                               command)
 
     if output[2] is not None:
         logger.error("error caught on instance command: %s", output[2])
