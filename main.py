@@ -7,7 +7,7 @@ import logging
 
 import utils
 import socks
-import detection
+import pydarknet as pdn
 
 
 def init_environ():
@@ -30,6 +30,29 @@ def init_environ():
     return environ
 
 
+def darknet_model(cfg, weight, data):
+    """Initialize Darknet model.
+
+    Args:
+        cfg: A string representing the cfg file path.
+        weight: A string representing the weight file path.
+        data: A string representing the data file path.
+
+    Returns:
+        A Darknet model tuple: (model, network, metadata).
+    """
+
+    dark = pdn.Pydarknet('libdarknet.so')
+
+    load_network = dark.init_load_net()
+    network = load_network(cfg.encode(), weight.encode(), 0)
+
+    load_metadata = dark.init_load_meta()
+    metadata = load_metadata(data.encode())
+
+    return (dark, network, metadata)
+
+
 def start_server():
     """Runs the catcher_rover main loop."""
 
@@ -40,10 +63,9 @@ def start_server():
     logger.info("catcher_rover server - hello")
 
     logger.info("initializing darknet model")
-    detector = detection.Detection(environ['darknet']['cfg'],
-                                   environ['darknet']['weight'],
-                                   environ['darknet']['data'],
-                                   None)
+    dark, network, metadata = darknet_model(environ['darknet']['cfg'],
+                                            environ['darknet']['weight'],
+                                            environ['darknet']['data'])
 
     logger.info("initializing server socket")
     server_socket = socks.init_server_socket()
@@ -63,8 +85,8 @@ def start_server():
 
         logger.info("starting label detection")
 
-        detector.image = os.path.join(environ['inbox_loc'], "frame.jpg")
-        results = detector.get_coordinates(environ['darknet']['label'])
+        image = os.path.join(environ['inbox_loc'], "frame.jpg")
+        results = dark.detect((network, metadata, image.encode()))
 
         logger.info("sending frame received ack")
         socks.send_msg(client, 'OK FRAME')
