@@ -26,7 +26,7 @@ def init_environ():
                'inbox_loc':inbox_loc,
                'net':utils.init_environ_net(),
                'darknet':utils.init_environ_darknet(),
-               'debug': os.environ['debug']}
+               'debug': os.environ['DEBUG']}
 
     return environ
 
@@ -65,7 +65,7 @@ def start_server():
 
     logger.info("initializing darknet model")
     dark, network, metadata = darknet_model(environ['darknet']['cfg'],
-                                            environ['darknet']['weight'],
+                                            environ['darknet']['weights'],
                                             environ['darknet']['data'])
 
     logger.info("initializing server socket")
