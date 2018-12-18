@@ -25,7 +25,8 @@ def init_environ():
     environ = {'caro_loc':caro_loc,
                'inbox_loc':inbox_loc,
                'net':utils.init_environ_net(),
-               'darknet':utils.init_environ_darknet()}
+               'darknet':utils.init_environ_darknet(),
+               'debug': os.environ['debug']}
 
     return environ
 
