@@ -90,7 +90,7 @@ def run_catcher_rover():
                " ; sudo git clone https://github.com/julienstark/catcher_rover.git" +
                " ; cd catcher_rover ; sudo git checkout origin/darknet-api" +
                " ; sudo mv ../darknet/ ./" +
-               " ; ./run.sh --mode server --debug " + environ['debug'])
+               " ; sudo systemctl start caroserver.service")
 
     output = run_cloud_command(environ['net']['nets']['ips'],
                                environ['net']['username'],
