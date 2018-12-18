@@ -88,7 +88,7 @@ def run_catcher_rover():
                " sudo tee /etc/resolv.conf > /dev/null"
                " ; git clone https://github.com/julienstark/catcher_rover.git"
                " ; cd catcher_rover ; git checkout origin/darknet-api" +
-               " ; mv ../darknet/ catcher_rover/"
+               " ; mv ../darknet/ ./"
                " ; ./run.sh --mode server --debug " + environ['debug'] + " &")
 
     output = run_cloud_command(environ['net']['nets']['ips'],
