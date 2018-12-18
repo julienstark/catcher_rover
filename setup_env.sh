@@ -1,5 +1,4 @@
 export CARO_LOGFILE=caro.log
-export CARO_FOLDER=$(pwd)
 export CARO_CAPTURE_FOLDER=$CARO_FOLDER/client/capture/
 export CARO_INBOX_FOLDER=$CARO_FOLDER/server/inbox/
 
