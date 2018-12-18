@@ -90,7 +90,7 @@ def init_environ_net():
     cloud_name = os.environ['CARO_CLOUD_NAME']
 
     instance = {'name':os.environ['CARO_CLOUD_INSTANCE_NAME'],
-                'image':bool(os.environ['CARO_CLOUD_INSTANCE_IMAGE']),
+                'image':os.environ['CARO_CLOUD_INSTANCE_IMAGE'],
                 'flavor':os.environ['CARO_CLOUD_INSTANCE_FLAVOR']}
 
     nets = {'security_groups':os.environ['CARO_CLOUD_INSTANCE_SECURITY_GROUPS'],
