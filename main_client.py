@@ -84,12 +84,12 @@ def run_catcher_rover():
                                  environ['net']['nets'],
                                  environ['net']['volume'])
 
-    command = ("echo 'nameserver 8.8.8.8' |"
-               " sudo tee /etc/resolv.conf > /dev/null"
-               " ; git clone https://github.com/julienstark/catcher_rover.git"
+    command = ("echo 'nameserver 8.8.8.8' |" +
+               " sudo tee /etc/resolv.conf > /dev/null" +
+               " ; git clone https://github.com/julienstark/catcher_rover.git" +
                " ; cd catcher_rover ; git checkout origin/darknet-api" +
-               " ; mv ../darknet/ ./"
-               " ; ./run.sh --mode server --debug " + environ['debug'] + " &")
+               " ; mv ../darknet/ ./" +
+               " ; ./run.sh --mode server --debug " + environ['debug'])
 
     output = run_cloud_command(environ['net']['nets']['ips'],
                                environ['net']['username'],
@@ -97,7 +97,9 @@ def run_catcher_rover():
                                command)
 
     if output[2] is not None:
-        logger.error("error caught on instance command: %s", output[2])
+        logger.error("error caught on instance command: %s", output[2].readlines())
+
+    output[1].readlines()
 
     cam = camera.Camera(environ['capture_loc'])
 
