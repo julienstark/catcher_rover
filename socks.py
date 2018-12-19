@@ -23,7 +23,7 @@ function send_msg: Send arbitrary message to the peer.
 import socket
 import os
 
-import netifaces as ni
+import netifaces as ni #pylint: disable=import-error
 
 
 def init_client_socket(address, port=5000):
