@@ -68,7 +68,7 @@ def run_cloud_command(remote_ip, username, keyfile, command, retry=10):
 
     connection.remote_connect(retry)
 
-    return connection.exec_command(command)
+    return (connection, connection.exec_command(command))
 
 
 def run_catcher_rover():
@@ -92,16 +92,17 @@ def run_catcher_rover():
                " ; sudo mv ../darknet/ ./" +
                " ; sudo systemctl start caroserver.service")
 
-    output = run_cloud_command(environ['net']['nets']['ips'],
-                               environ['net']['username'],
-                               environ['net']['keyfile'],
-                               command)
+    connection, output = run_cloud_command(environ['net']['nets']['ips'],
+                                           environ['net']['username'],
+                                           environ['net']['keyfile'],
+                                           command)
 
     if output[2] is not None:
         logger.error("error caught on instance command: %s", output[2].readlines())
 
     output[1].readlines()
 
+    connection.client.close()
     cam = camera.Camera(environ['capture_loc'])
 
     client_socket = socks.init_client_socket(environ['net']['nets']['ips'])
