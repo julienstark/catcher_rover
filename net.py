@@ -191,9 +191,18 @@ class Cloud():
             None
         """
 
-        logging.info("deleting instance %s", str(self.instance['name']))
+        logging.info("starting deletion of instance %s", str(self.instance['name']))
 
-        self.conn.delete_server(self.instance['name'])
+        munch = self.conn.get_server(str(self.instance['name']))
+        volume = munch.toDict()['properties']['attached_volumes'][0]['id']
+
+        logging.info("removing instance %s", str(self.instance['name']))
+
+        self.conn.delete_server(self.instance['name'], wait=True)
+
+        logging.info("removing volume %s", str(volume))
+
+        self.conn.delete_volume(volume, wait=True)
 
 
 def initialize_connection():
