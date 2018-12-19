@@ -120,7 +120,7 @@ def start_server():
         logger.info("darknet output: %s", str(results))
 
         if results:
-            results = compute_translation_vector(results, image)
+            results = compute_translation_vector(results[0], image)
 
         logger.info("sending frame received ack")
         socks.send_msg(client, 'OK FRAME')
