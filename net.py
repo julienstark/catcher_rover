@@ -172,7 +172,7 @@ class Cloud():
                                 boot_volume=None,
                                 boot_from_volume=True,
                                 volume_size=self.volume['volume_size'],
-                                terminate_volume=True,
+                                terminate_volume=False,
                                 security_groups=self.nets['security_groups'],
                                 availability_zone="nova",
                                 network=self.nets['network'],
