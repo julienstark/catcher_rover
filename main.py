@@ -117,6 +117,8 @@ def start_server():
         image = os.path.join(environ['inbox_loc'], "frame.jpg")
         results = dark.detect((network, metadata, image.encode()))
 
+        logger.info("darknet output: %s", str(results))
+
         if results:
             results = compute_translation_vector(results, image)
 
