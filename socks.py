@@ -22,7 +22,8 @@ function send_msg: Send arbitrary message to the peer.
 
 import socket
 import os
-import subprocess
+
+import netifaces as ni #pylint: disable=import-error
 
 
 def init_client_socket(address, port=5000):
@@ -56,11 +57,7 @@ def init_server_socket(address=None, port=5000):
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if address is None:
-        cmd = (r"ip addr show | awk '$1 ~ /^inet$/ { print $2 }' "
-               r"| sed 's/\/[0-9]*//g' | grep -v '127.0.0.1' -m1"
-              )
-        ip_raw = subprocess.check_output([cmd], shell=True)
-        address = ip_raw.decode('utf-8')[:-1]
+        address = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((address, port))
 

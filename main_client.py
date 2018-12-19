@@ -4,6 +4,7 @@ Main runfile for the CARO client-side application.
 
 import os
 import logging
+import time
 
 import utils
 import camera
@@ -68,7 +69,7 @@ def run_cloud_command(remote_ip, username, keyfile, command, retry=10):
 
     connection.remote_connect(retry)
 
-    return connection.exec_command(command)
+    return (connection, connection.exec_command(command))
 
 
 def run_catcher_rover():
@@ -77,33 +78,41 @@ def run_catcher_rover():
     environ = init_environ()
 
     utils.init_logger(environ['debug'])
-    logger = logging.getLogger('__name__')
+    logger = logging.getLogger('run_catcher_rover')
 
     cloud = start_cloud_instance(environ['net']['cloud_name'],
                                  environ['net']['instance'],
                                  environ['net']['nets'],
                                  environ['net']['volume'])
 
-    command = ("echo 'nameserver 8.8.8.8' |"
-               " sudo tee /etc/resolv.conf > /dev/null"
-               " ; git clone https://github.com/julienstark/catcher_rover.git"
-               " ; mv darknet/ catcher_rover/"
-               " ; cd catcher_rover ; ./run.sh --mode server --debug " +
-               environ['debug'] + " &")
+    command = ("echo 'nameserver 8.8.8.8' |" +
+               " sudo tee /etc/resolv.conf > /dev/null" +
+               " ; cd /opt" +
+               " ; sudo git clone https://github.com/julienstark/catcher_rover.git" +
+               " ; cd catcher_rover ; sudo git checkout -q origin/darknet-api" +
+               " ; sudo mv ../darknet/ ./" +
+               " ; sudo systemctl start caroserver.service")
 
-    output = run_cloud_command(environ['net']['nets']['ips'],
-                               environ['net']['username'],
-                               environ['net']['keyfile'],
-                               command)
+    connection, output = run_cloud_command(environ['net']['nets']['ips'],
+                                           environ['net']['username'],
+                                           environ['net']['keyfile'],
+                                           command)
 
-    if output[2] is not None:
-        logger.error("error caught on instance command: %s", output[2])
+    output[1].readlines()
+
+    connection.client.close()
+
+    logger.info("initializing camera")
 
     cam = camera.Camera(environ['capture_loc'])
 
-    client_socket = socks.init_client_socket(environ['net']['nets']['ips'])
+    logger.info("connecting to instance %s", environ['net']['nets']['ips'])
 
-    for count in range(10):
+    time.sleep(15)
+
+    for count in range(15):
+
+        client_socket = socks.init_client_socket(str(environ['net']['nets']['ips']))
 
         logger.info("iteration %s, capturing frame", str(count))
         cam.capture()
@@ -123,21 +132,20 @@ def run_catcher_rover():
 
         socks.send_msg(client_socket, "OK VECT")
         recv_string = socks.receive_bytes_to_string(client_socket)
-        recv_string = recv_string.replace(", ", " ").replace(": ", ":")
-        recv_string = recv_string.strip("{}").replace("'", "")
         os.remove(frame_loc)
 
         logger.info("vector received")
 
-        if recv_string != "":
+        if recv_string != "[]":
 
-            # Do the robot move here
-            pass
+            logger.info("vector: %s", recv_string)
 
         else:
             logger.warning("no detection for this frame")
 
-        cloud.delete_instance()
+    cloud.delete_instance()
+
+    logger.info("closing client")
 
 
 if __name__ == '__main__':

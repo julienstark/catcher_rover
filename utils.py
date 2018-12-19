@@ -5,12 +5,16 @@ function init_logger: Initialize the logger function.
 
 function init_environ_folder: Return necessary variables based on environment.
 
+function get_image_size: Get image size pixel W and H from filepath.
+
 class SuppressStdOutput: Suppress embedded function outputs.
 """
 
 import os
 import inspect
 import logging
+import struct
+import imghdr
 
 
 def init_logger(debug):
@@ -90,7 +94,7 @@ def init_environ_net():
     cloud_name = os.environ['CARO_CLOUD_NAME']
 
     instance = {'name':os.environ['CARO_CLOUD_INSTANCE_NAME'],
-                'image':bool(os.environ['CARO_CLOUD_INSTANCE_IMAGE']),
+                'image':os.environ['CARO_CLOUD_INSTANCE_IMAGE'],
                 'flavor':os.environ['CARO_CLOUD_INSTANCE_FLAVOR']}
 
     nets = {'security_groups':os.environ['CARO_CLOUD_INSTANCE_SECURITY_GROUPS'],
@@ -135,6 +139,49 @@ def init_environ_darknet():
                        'data':os.environ['CARO_DARKNET_DATA']}
 
     return darknet_environ
+
+
+def get_image_size(fname):
+    """Determine the image type of fhandle and return its size.
+
+     Args:
+        fname: A string representing the image path
+
+    Returns:
+        A tuple including the image pixel width and height.
+    """
+
+    with open(fname, 'rb') as fhandle:
+        head = fhandle.read(24)
+        if len(head) != 24:
+            return None
+        if imghdr.what(fname) == 'png':
+            check = struct.unpack('>i', head[4:8])[0]
+            if check != 0x0d0a1a0a:
+                return None
+            width, height = struct.unpack('>ii', head[16:24])
+        elif imghdr.what(fname) == 'gif':
+            width, height = struct.unpack('<HH', head[6:10])
+        elif imghdr.what(fname) == 'jpeg':
+            try:
+                fhandle.seek(0) # Read 0xff next
+                size = 2
+                ftype = 0
+                while not 0xc0 <= ftype <= 0xcf:
+                    fhandle.seek(size, 1)
+                    byte = fhandle.read(1)
+                    while ord(byte) == 0xff:
+                        byte = fhandle.read(1)
+                    ftype = ord(byte)
+                    size = struct.unpack('>H', fhandle.read(2))[0] - 2
+                # We are at a SOFn block
+                fhandle.seek(1, 1)  # Skip `precision' byte.
+                height, width = struct.unpack('>HH', fhandle.read(4))
+            except Exception: #pylint: disable=broad-except
+                return None
+        else:
+            return None
+        return width, height
 
 
 class SuppressStdOutput():

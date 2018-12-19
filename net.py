@@ -167,12 +167,12 @@ class Cloud():
         logging.info("creating instance %s", str(self.instance['name']))
 
         self.conn.create_server(self.instance['name'],
-                                image=None,
+                                image=self.instance['image'],
                                 flavor=self.instance['flavor'],
-                                boot_volume=self.volume['boot_volume'],
+                                boot_volume=None,
                                 boot_from_volume=True,
                                 volume_size=self.volume['volume_size'],
-                                terminate_volume=True,
+                                terminate_volume=False,
                                 security_groups=self.nets['security_groups'],
                                 availability_zone="nova",
                                 network=self.nets['network'],
@@ -191,9 +191,18 @@ class Cloud():
             None
         """
 
-        logging.info("deleting instance %s", str(self.instance['name']))
+        logging.info("starting deletion of instance %s", str(self.instance['name']))
 
-        self.conn.delete_server(self.instance['name'])
+        munch = self.conn.get_server(str(self.instance['name']))
+        volume = munch.toDict()['properties']['attached_volumes'][0]['id']
+
+        logging.info("removing instance %s", str(self.instance['name']))
+
+        self.conn.delete_server(self.instance['name'], wait=True)
+
+        logging.info("removing volume %s", str(volume))
+
+        self.conn.delete_volume(volume, wait=True)
 
 
 def initialize_connection():
