@@ -78,7 +78,7 @@ def run_catcher_rover():
     environ = init_environ()
 
     utils.init_logger(environ['debug'])
-    logger = logging.getLogger('__name__')
+    logger = logging.getLogger('run_catcher_rover')
 
     cloud = start_cloud_instance(environ['net']['cloud_name'],
                                  environ['net']['instance'],
