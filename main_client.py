@@ -86,9 +86,9 @@ def run_catcher_rover():
 
     command = ("echo 'nameserver 8.8.8.8' |" +
                " sudo tee /etc/resolv.conf > /dev/null" +
-               " cd /opt" +
+               " ; cd /opt" +
                " ; sudo git clone https://github.com/julienstark/catcher_rover.git" +
-               " ; cd catcher_rover ; sudo git checkout origin/darknet-api" +
+               " ; cd catcher_rover ; sudo git checkout -q origin/darknet-api" +
                " ; sudo mv ../darknet/ ./" +
                " ; sudo systemctl start caroserver.service")
 
@@ -96,9 +96,6 @@ def run_catcher_rover():
                                            environ['net']['username'],
                                            environ['net']['keyfile'],
                                            command)
-
-    if output[2] is not None:
-        logger.error("error caught on instance command: %s", output[2].readlines())
 
     output[1].readlines()
 
