@@ -54,6 +54,34 @@ def darknet_model(cfg, weight, data):
     return (dark, network, metadata)
 
 
+def compute_translation_vector(results, image):
+    """Compute and returns the pixel translation from center with input results.
+
+    Args:
+        results: A tuple including label, confidence level, and coordinate tuples
+        from darknet output.
+        image: A string representing the path of an image to calculate the
+        translation vector from.
+
+    Returns:
+        A tuple containing the x_translation and y_translation pixel from image
+        center.
+    """
+
+    im_shape = utils.get_image_size(image)
+
+    im_xcenter = int(im_shape[0] / 2)
+    im_ycenter = int(im_shape[1] / 2)
+
+    res_xcenter = int(results[2][0]) + int(((results[2][2] - results[2][0])/2))
+    res_ycenter = int(results[2][1]) + int(((results[2][3] - results[2][1])/2))
+
+    xcenter = res_xcenter - im_xcenter
+    ycenter = res_ycenter - im_ycenter
+
+    return xcenter, ycenter
+
+
 def start_server():
     """Runs the catcher_rover main loop."""
 
