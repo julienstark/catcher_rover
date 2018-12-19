@@ -110,7 +110,7 @@ def run_catcher_rover():
 
     time.sleep(15)
 
-    for count in range(3):
+    for count in range(15):
 
         client_socket = socks.init_client_socket(str(environ['net']['nets']['ips']))
 
@@ -132,16 +132,13 @@ def run_catcher_rover():
 
         socks.send_msg(client_socket, "OK VECT")
         recv_string = socks.receive_bytes_to_string(client_socket)
-        recv_string = recv_string.replace(", ", " ").replace(": ", ":")
-        recv_string = recv_string.strip("{}").replace("'", "")
         os.remove(frame_loc)
 
         logger.info("vector received")
 
-        if recv_string != "":
+        if recv_string != "[]":
 
-            # Do the robot move here
-            pass
+            logger.info("vector: %s", recv_string)
 
         else:
             logger.warning("no detection for this frame")
