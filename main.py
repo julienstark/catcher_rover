@@ -117,6 +117,9 @@ def start_server():
         image = os.path.join(environ['inbox_loc'], "frame.jpg")
         results = dark.detect((network, metadata, image.encode()))
 
+        if results:
+            results = compute_translation_vector(results, image)
+
         logger.info("sending frame received ack")
         socks.send_msg(client, 'OK FRAME')
 
