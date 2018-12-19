@@ -4,6 +4,7 @@ Main runfile for the CARO client-side application.
 
 import os
 import logging
+import time
 
 import utils
 import camera
@@ -100,11 +101,18 @@ def run_catcher_rover():
     output[1].readlines()
 
     connection.client.close()
+
+    logger.info("initializing camera")
+
     cam = camera.Camera(environ['capture_loc'])
 
-    client_socket = socks.init_client_socket(environ['net']['nets']['ips'])
+    logger.info("connecting to instance %s", environ['net']['nets']['ips'])
 
-    for count in range(10):
+    time.sleep(15)
+
+    for count in range(3):
+
+        client_socket = socks.init_client_socket(str(environ['net']['nets']['ips']))
 
         logger.info("iteration %s, capturing frame", str(count))
         cam.capture()
@@ -138,7 +146,9 @@ def run_catcher_rover():
         else:
             logger.warning("no detection for this frame")
 
-        cloud.delete_instance()
+    cloud.delete_instance()
+
+    logger.info("closing client")
 
 
 if __name__ == '__main__':
