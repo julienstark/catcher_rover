@@ -1,3 +1,4 @@
+#pylint: disable=no-member
 """
 Module supporting the Camera class, responsible for taking snapshots.
 
