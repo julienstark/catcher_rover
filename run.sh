@@ -58,6 +58,6 @@ if [[ "${CLIENT}" = 1 ]]; then
     mkdir -p "$CARO_CAPTURE_FOLDER"
   fi
 
-  python3 main_client.py
+  sudo -E python3 main_client.py
 
 fi
