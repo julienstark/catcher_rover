@@ -12,6 +12,7 @@ import utils
 import camera
 import net
 import socks
+import rover
 
 
 def init_environ():
@@ -108,6 +109,10 @@ def run_catcher_rover():
 
     cam = camera.Camera(environ['capture_loc'])
 
+    logger.info("initializing rover")
+    rove = rover.Rover('/dev/ttyACM0', sleep=1.5)
+    rove.change_rover_mode('MANUAL')
+
     logger.info("connecting to instance %s", environ['net']['nets']['ips'])
 
     time.sleep(15)
@@ -143,6 +148,10 @@ def run_catcher_rover():
             recv_vect = literal_eval(recv_string)
             logger.info("vector: xval: %s yval: %s",
                         str(recv_vect[0]), str(recv_vect[1]))
+            logger.info("moving rover: %s", str(1500 + recv_vect[0]))
+            rove.channel_override(recv_vect[0], 0)
+            time.sleep(rove.rest_time)
+            rove.channel_override(0, 0)
 
         else:
             logger.warning("no detection for this frame")
