@@ -183,7 +183,7 @@ class Rover:
             None
         """
 
-        if mode not in ['AUTO', 'GUIDED', 'RETURN_TO_LAUNCH']:
+        if mode not in ['MANUAL', 'AUTO', 'GUIDED', 'RETURN_TO_LAUNCH']:
             logging.error("unknown mode %s, leaving mode unchanged.", str(mode))
 
         else:
