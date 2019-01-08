@@ -6,6 +6,8 @@ import os
 import logging
 import time
 
+from ast import literal_eval
+
 import utils
 import camera
 import net
@@ -138,7 +140,9 @@ def run_catcher_rover():
 
         if recv_string != "[]":
 
-            logger.info("vector: %s", recv_string)
+            recv_vect = literal_eval(recv_string)
+            logger.info("vector: xval: %s yval: %s",
+                        str(recv_vect[0]), str(recv_vect[1]))
 
         else:
             logger.warning("no detection for this frame")
