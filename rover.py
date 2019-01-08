@@ -111,6 +111,37 @@ class Rover:
         self._rest_time = sleep
 
 
+    def set_armed(self):
+        """Enable rover armed mode.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+
+        if not self._vehicle.armed:
+            self._vehicle.armed = True
+
+
+    def channel_override(self, yaw, speed):
+        """Send RC override commands to the rover.
+
+        Args:
+            yaw = An int representing the yaw angle, between 1000 and 2000.
+            speed = An int represneting the throttle, between 1000 and 2000.
+
+        Returns:
+            None
+        """
+
+        steering = min(max(1500 + yaw, 1000), 2000)
+        throttle = min(max(1500 + speed, 1000), 2000)
+
+        self._vehicle.channels.overrides = {'1':steering, '3':throttle}
+
+
     def mav_cmd_nav_set_yaw_speed(self, yaw, speed):
         """Send yaw angle and speed to vehicle via mavlink_cmd navigation.
 
